@@ -1,0 +1,39 @@
+name: Update from monorepo
+
+on:
+  schedule:
+    - cron: "29 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out slint-tmLanguage repo
+        uses: actions/checkout@v4
+        with:
+          path: mine
+      - name: Check out monorepo
+        uses: actions/checkout@v4
+        with:
+          repository: slint-ui/slint
+          sparse-checkout: editors/vscode
+          path: monorepo
+
+      - name: Copy file
+        run: |
+          cp monorepo/editors/vscode/slint.tmLanguage.json mine/Slint.YAML-tmLanguage
+
+      - name: Git status
+        run: |
+          git status
+          git diff
+        working-directory: mine
+
+      - name: Push to repository
+        run: |
+          MONOREPO_VERSION=$( cd ../monorepo ; git log -n 1 --pretty=format:%H --  editors/vscode/slint.tmLanguage.json)
+          git config --global user.name "Slint Update From Monorepo Bot"
+          git config --global user.email "none@users.noreply.github.com"
+          git add -A && git commit -m "Update from Slint Repository commit ${MONOREPO_VERSION}" && git push || true
+        working-directory: mine
