@@ -22,7 +22,7 @@ jobs:
 
       - name: Copy file
         run: |
-          cp monorepo/editors/vscode/slint.tmLanguage.json mine/Slint.YAML-tmLanguage
+          cp monorepo/docs/common/src/utils/slint.tmLanguage.json mine/Slint.YAML-tmLanguage
 
       - name: Git status
         run: |
