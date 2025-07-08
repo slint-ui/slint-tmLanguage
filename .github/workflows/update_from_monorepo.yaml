@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: slint-ui/slint
-          sparse-checkout: editors/vscode
+          sparse-checkout: docs/common
           path: monorepo
 
       - name: Copy file
